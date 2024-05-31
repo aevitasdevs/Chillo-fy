@@ -19,7 +19,7 @@ def getUser(username: str, db: Session=Depends(getDb)):
         return userWithId
     else:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND,
-                            detal= f"user with id {id} doesn't exist")
+                            detail= f"user with id {id} doesn't exist")
 
 
 @router.post("/create", response_model= schemas.UserOutputSchema)

@@ -21,13 +21,14 @@ def getAllSongs(db: Session= Depends(getDb)):
 def getSong(id: int, db: Session= Depends(getDb)):
     query = db.query(models.Song).filter(models.Song.id == id).first()
     if query:
-        return StreamingResponse(io.BytesIO(query.content), media_type="audio/mp3")
+        return query.content
+        #return StreamingResponse(io.BytesIO(query.content), media_type="audio/mp3")
     else:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, 
                             detail= "song not found")
 
 @router.get("/poster/{id}")
-def getSong(id: int, db: Session= Depends(getDb)):
+def getPoster(id: int, db: Session= Depends(getDb)):
     query = db.query(models.Song).filter(models.Song.id == id).first()
     if query:
         return StreamingResponse(io.BytesIO(query.poster), media_type="image/jpg")
