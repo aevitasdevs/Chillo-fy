@@ -1,5 +1,5 @@
 import io
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, Depends, Form, Request, UploadFile, File, HTTPException, status
 from fastapi.responses import StreamingResponse, JSONResponse
 from sqlalchemy.orm import Session
 from ..database import getDb
@@ -17,17 +17,17 @@ def getAllSongs(db: Session= Depends(getDb)):
 
     return query
 
-@router.get("/song/{id}")
+@router.get("/song")
 def getSong(id: int, db: Session= Depends(getDb)):
     query = db.query(models.Song).filter(models.Song.id == id).first()
+
     if query:
-        return query.content
-        #return StreamingResponse(io.BytesIO(query.content), media_type="audio/mp3")
+        return StreamingResponse(io.BytesIO(query.content), media_type="audio/mp3")
     else:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, 
                             detail= "song not found")
 
-@router.get("/poster/{id}")
+@router.get("/poster")
 def getPoster(id: int, db: Session= Depends(getDb)):
     query = db.query(models.Song).filter(models.Song.id == id).first()
     if query:
@@ -38,7 +38,7 @@ def getPoster(id: int, db: Session= Depends(getDb)):
     
 
 @router.post("/create")
-async def createSong(songName: str, song: UploadFile= File(...), poster: UploadFile= File(...),
+async def createSong(songName: str = Form(...), song: UploadFile= File(...), poster: UploadFile= File(...),
                       db: Session= Depends(getDb)):
     
     content = await song.read()
