@@ -10,6 +10,11 @@ function Home() {
             <button>Login</button>
           </Link>
         </li>
+        <li>
+          <Link to="/songs">
+            <button>Songs</button>
+          </Link>
+        </li>
       </ul>
     </>
     )
