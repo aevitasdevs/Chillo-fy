@@ -19,7 +19,7 @@ def getAllSongs(db: Session= Depends(getDb)):
 
 @router.get("/song")
 def getSong(id: int, db: Session= Depends(getDb), 
-            currentUser: models.User = Depends(oauth2.getCurrentUser)):
+            currentUser: int = Depends(oauth2.getCurrentUser)):
     query = db.query(models.Song).filter(models.Song.id == id).first()
 
     if query:

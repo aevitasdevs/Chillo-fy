@@ -13,7 +13,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 SECRET_KEY = "fzFpOwuLmN9S/FyG+0PEyuoKVwLSCbG2AknNflEy2J8WSy8MLuF/ECBHcmSThfvC"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 3600
+ACCESS_TOKEN_EXPIRE_MINUTES = 2
 
 
 def createAccessToken(data: dict):
@@ -30,7 +30,6 @@ def createAccessToken(data: dict):
 def verifyAccessToken(token: str, credentials_exception):
 
     try:
-
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id: int = payload.get("id")
         if id is None:
@@ -47,8 +46,4 @@ def getCurrentUser(token: str = Depends(oauth2_scheme), db: Session = Depends(da
                                           detail=f"Could not validate credentials", 
                                           headers={"WWW-Authenticate": "Bearer"})
 
-    token = verifyAccessToken(token, credentials_exception)
-
-    user = db.query(models.User).filter(models.User.id == token.id).first()
-
-    return user
+    return verifyAccessToken(token, credentials_exception)

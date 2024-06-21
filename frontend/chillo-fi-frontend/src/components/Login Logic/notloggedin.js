@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function NotLoggedIn({onsubmit}){
+function NotLoggedIn({onsubmit, userError}){
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
 
@@ -21,17 +21,23 @@ function NotLoggedIn({onsubmit}){
         if (response.ok){
             console.log(data)
             localStorage.setItem('token', data.token)
-        } else {
-            console.error(data.detail)
+            onsubmit();
+        } else if (response.status === 404) {
+            console.error("Error logging in: User not found");
+            userError();
         }
-        }catch(error){
+        } catch (error) {
             console.error("Couldn't login: ", error)
         }
     } 
     function handleSubmit(e){
         e.preventDefault();
-        login(userName, password);
-        onsubmit();
+        if (userName !== "" & password !== ""){
+            login(userName, password);
+        }
+        else {
+            alert("Please fill all the fields.")
+        }
     }
 
     return (
@@ -56,35 +62,11 @@ function NotLoggedIn({onsubmit}){
             <br />
             <button type="submit">Submit</button>
          </form>
+         <Link to="/">
+            <button>Home</button>
+         </Link>
         </>
     )
 }
 
-function LoggedIn({onsubmit}){
-    return (
-        <>
-            <h1>You are already logged in :))</h1>
-            <button onClick={onsubmit}>Click me to logout.</button>
-        </>
-    )
-}
-
-function Login() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    
-    const login = () => {
-        setIsLoggedIn(true)
-    }
-    const logout = () => {
-        localStorage.removeItem("token")
-        setIsLoggedIn(false)
-    }
-    if (isLoggedIn) {
-        return <LoggedIn onsubmit={logout}/>
-    }
-    else {
-        return <NotLoggedIn onsubmit={login}/>
-    }
-}
-
-export default Login
+export default NotLoggedIn

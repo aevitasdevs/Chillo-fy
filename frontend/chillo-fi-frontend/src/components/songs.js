@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const url = "http://127.0.0.1:8000" 
 function Songs(){
@@ -58,6 +59,10 @@ function Songs(){
             </audio> :
             searching ? (<p>Loading...</p>) : (<p>Search for song with id</p>)
             }
+            <br />
+            <Link to="/">
+                <button>Home</button>
+            </Link>
         </>
     )
 }
