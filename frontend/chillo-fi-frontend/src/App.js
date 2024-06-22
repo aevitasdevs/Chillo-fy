@@ -7,6 +7,8 @@ import Songs from './Components/songs';
 import LoggedIn from './Components/Login Logic/loggedin';
 import { LoginContext } from './Contexts/LoginContext';
 import { useState } from 'react';
+import SongMenu from './Components/songsMenu';
+import UploadSong from './Components/uploadsong';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState((localStorage.getItem("token") !== null))
@@ -26,9 +28,19 @@ function App() {
     },
     {
       path: "/songs",
-      element: (<ProtectedRoutes>
-        <Songs />
-      </ProtectedRoutes>)
+      element: (<ProtectedRoutes><SongMenu /></ProtectedRoutes>)
+
+      //<ProtectedRoutes>
+      // <Songs />
+      // </ProtectedRoutes>
+    },
+    {
+      path:"/hear",
+      element: <Songs />
+    },
+    {
+      path: "/upload",
+      element: <UploadSong />
     }
   ])
 
