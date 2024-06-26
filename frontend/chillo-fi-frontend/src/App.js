@@ -3,12 +3,13 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Login from './Components/Login Logic/login';
 import Home from './Components/home';
 import ProtectedRoutes from './Components/protectedroutes'
-import Songs from './Components/songs';
+import Songs from './Components/Song Logic/songs';
 import LoggedIn from './Components/Login Logic/loggedin';
 import { LoginContext } from './Contexts/LoginContext';
 import { useState } from 'react';
-import SongMenu from './Components/songsMenu';
-import UploadSong from './Components/uploadsong';
+import SongMenu from './Components/Song Logic/songsMenu';
+import UploadSong from './Components/Song Logic/uploadsong';
+import DeleteSong from './Components/Song Logic/DeleteSong';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState((localStorage.getItem("token") !== null))
@@ -41,6 +42,10 @@ function App() {
     {
       path: "/upload",
       element: <UploadSong />
+    },
+    {
+      path: "/delete",
+      element: <DeleteSong />
     }
   ])
 

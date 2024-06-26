@@ -18,9 +18,9 @@ def getAllSongs(db: Session= Depends(getDb)):
     return query
 
 @router.get("/song")
-def getSong(id: int, db: Session= Depends(getDb), 
+def getSong(name: str, db: Session= Depends(getDb), 
             currentUser: int = Depends(oauth2.getCurrentUser)):
-    query = db.query(models.Song).filter(models.Song.id == id).first()
+    query = db.query(models.Song).filter(models.Song.songTitle == name).first()
 
     if query:
         return StreamingResponse(io.BytesIO(query.content), media_type="audio/mp3")
@@ -29,8 +29,8 @@ def getSong(id: int, db: Session= Depends(getDb),
                             detail= "song not found")
 
 @router.get("/poster")
-def getPoster(id: int, db: Session= Depends(getDb)):
-    query = db.query(models.Song).filter(models.Song.id == id).first()
+def getPoster(name: str, db: Session= Depends(getDb)):
+    query = db.query(models.Song).filter(models.Song.songTitle == name).first()
     if query:
         return StreamingResponse(io.BytesIO(query.poster), media_type="image/jpg")
     else:
@@ -40,13 +40,34 @@ def getPoster(id: int, db: Session= Depends(getDb)):
 
 @router.post("/create")
 async def createSong(songName: str = Form(...), song: UploadFile= File(...), poster: UploadFile= File(...),
-                      db: Session= Depends(getDb)):
+                      db: Session= Depends(getDb),
+                      currentUser: schemas.TokenData =  Depends(oauth2.getCurrentUser)):
     
     content = await song.read()
     posterContent = await poster.read()
-    newSong = models.Song(songTitle= songName, content= content, poster= posterContent, artistId= 1)
+    newSong = models.Song(songTitle= songName, content= content, poster= posterContent, artistId= currentUser.id)
     db.add(newSong)
     db.commit()
     db.refresh(newSong)
 
     return {"msg": "idk fam"}
+
+@router.delete("/delete")
+async def deleteSong(songName: str = Form(...), 
+                     currentUser: int= Depends(oauth2.getCurrentUser),
+                     db: Session= Depends(getDb)):
+    
+    query = db.query(models.Song).filter(models.Song.songTitle == songName).first()
+
+    if (query):
+        if (query.artistId == currentUser.id):
+            db.delete(query)
+            db.commit()
+        else:
+            raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, 
+                                detail= "You haven't created this song")
+    else:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, 
+                                detail= "Song doesnt exist")
+    
+    return {f"Song {query.songTitle} removed from database."}

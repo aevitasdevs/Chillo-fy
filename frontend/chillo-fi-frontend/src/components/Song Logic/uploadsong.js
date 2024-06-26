@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const url = "http://127.0.0.1:8000/songs/create"
 function UploadSong() {
@@ -11,11 +12,14 @@ function UploadSong() {
         formData.append("songName", name);
         formData.append("song", audio);
         formData.append("poster", poster)
-
+        const token = localStorage.getItem("token")
         try{
             const response = fetch(url, {
                 method: "POST",
-                body: formData
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
 
             if(response.ok){
@@ -56,6 +60,10 @@ function UploadSong() {
                 <br />
                 <button type="submit">Upload song</button>
             </form>
+            <br />
+            <Link to="/">
+                <button>Home</button>
+            </Link>
         </>
     )
 }

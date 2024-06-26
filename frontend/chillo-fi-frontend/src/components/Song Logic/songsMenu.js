@@ -15,6 +15,11 @@ function SongMenu() {
                 <button>Upload songs</button>
             </Link>
             </li>
+            <li>
+            <Link to="/delete">
+                <button>Delete songs</button>
+            </Link>
+            </li>
         </ul>
     </>
     )
