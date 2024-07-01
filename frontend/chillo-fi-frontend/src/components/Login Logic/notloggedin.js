@@ -65,6 +65,10 @@ function NotLoggedIn({onsubmit, userError}){
          <Link to="/">
             <button>Home</button>
          </Link>
+         <br />
+         <Link to="/createuser">
+            <button>Dont have an account? Create one for free :)</button>
+         </Link>
         </>
     )
 }

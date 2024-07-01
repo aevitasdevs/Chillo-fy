@@ -10,7 +10,8 @@ import { useState } from 'react';
 import SongMenu from './Components/Song Logic/songsMenu';
 import UploadSong from './Components/Song Logic/uploadsong';
 import DeleteSong from './Components/Song Logic/DeleteSong';
-
+import CreateUser from './Components/User Logic/CreateUserLogic';
+import React from 'react';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState((localStorage.getItem("token") !== null))
   
@@ -30,10 +31,6 @@ function App() {
     {
       path: "/songs",
       element: (<ProtectedRoutes><SongMenu /></ProtectedRoutes>)
-
-      //<ProtectedRoutes>
-      // <Songs />
-      // </ProtectedRoutes>
     },
     {
       path:"/hear",
@@ -46,6 +43,10 @@ function App() {
     {
       path: "/delete",
       element: <DeleteSong />
+    },
+    {
+      path: "/createuser",
+      element: <CreateUser />
     }
   ])
 
