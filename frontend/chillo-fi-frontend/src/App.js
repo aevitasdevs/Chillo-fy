@@ -12,6 +12,7 @@ import UploadSong from './Components/Song Logic/uploadsong';
 import DeleteSong from './Components/Song Logic/DeleteSong';
 import CreateUser from './Components/User Logic/CreateUserLogic';
 import React from 'react';
+import Queue from './Components/Song Logic/queue';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState((localStorage.getItem("token") !== null))
   
@@ -47,6 +48,10 @@ function App() {
     {
       path: "/createuser",
       element: <CreateUser />
+    },
+    {
+      path: "/queue",
+      element: <Queue />
     }
   ])
 

@@ -6,6 +6,11 @@ function SongMenu() {
     <>
         <ul>
             <li>
+            <Link to="/queue">
+                <button>Queue</button>
+            </Link>
+            </li>
+            <li>
             <Link to="/hear">
                 <button>Hear songs</button>
             </Link>
