@@ -17,6 +17,16 @@ def getAllSongs(db: Session= Depends(getDb)):
 
     return query
 
+@router.get("/", response_model= List[schemas.SongResponse])
+def getSongInfo(name: str = Form(...), db: Session= Depends(getDb)):
+    query = db.query(models.Song).filter(models.Song.songTitle == name)
+    
+    if query:
+        return query
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                            detail= "Song not found")
+
 @router.get("/song")
 def getSong(name: str, db: Session= Depends(getDb), 
             currentUser: int = Depends(oauth2.getCurrentUser)):
